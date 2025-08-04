@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Badge, Button, Card, Col, Container, Pagination, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Menu } from './Include/Menu';
 
-export const Home = () => {
+export const Search = () => {
+    const [searchParam] = useSearchParams();
+    const {query} = searchParam.get("query");
   const [data,setData] = useState([]);
   const [loading,setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +17,7 @@ export const Home = () => {
   useEffect(()=>{
     const fetchData = async()=>{
       try{
-        const response = await axios.get(`https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=${currentPage}`);
+        const response = await axios.get(`https://otruyenapi.com/v1/api/tim-kiem?keyword=${query}&page=${currentPage}`);
         setData(response.data);
         setLoading(false);
         console.log(response);
@@ -25,7 +27,7 @@ export const Home = () => {
       }
     };
     fetchData();
-  },[currentPage]);
+  },[query,currentPage]);
   if(loading) return <p>Loading...</p>
   if(error) return <p>Error: {error}</p>
 
@@ -62,7 +64,7 @@ export const Home = () => {
             <Card>
               <Card.Body>
                 <Card.Title>
-                  {data.data.seoOnPage.titleHead}
+                  keyword Search : {query}
                 </Card.Title>
                 {data.data.seoOnPage.descriptionHead}
               </Card.Body>

@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Col, Container, Form, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Menu = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -17,6 +18,13 @@ export const Menu = () => {
     };
     fetchData();
   }, []);
+
+  const handleSearch =(event)=>{
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get("keyword");
+    navigate(`/search?query=${query}`);
+  }
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -48,6 +56,21 @@ export const Menu = () => {
                     </NavDropdown.Item>
                   )}
               </NavDropdown>
+              <Form inline autoComplete="off" method="get" onSubmit={handleSearch}>
+                <Row>
+                  <Col xs="auto">
+                    <Form.Control
+                      type="text"
+                      name="keyword"
+                      placeholder="Search"
+                      className=" mr-sm-2"
+                    />
+                  </Col>
+                  <Col xs="auto">
+                    <Button type="submit">Submit</Button>
+                  </Col>
+                </Row>
+              </Form>
             </Nav>
           </Navbar.Collapse>
         </Container>
