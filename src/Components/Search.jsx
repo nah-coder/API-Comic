@@ -7,7 +7,7 @@ import { Menu } from './Include/Menu';
 
 export const Search = () => {
     const [searchParam] = useSearchParams();
-    const {query} = searchParam.get("query");
+    const query = searchParam.get("query");
   const [data,setData] = useState([]);
   const [loading,setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,14 +73,14 @@ export const Search = () => {
         </Row>
         <Row>
           {items && items.length > 0 ? (items.map((item,index)=>(
-            <Col>
+            <Col key={item.id || item.slug || index} xs={6} md={3} className="mb-4">
             <Card>
             <Card.Img variant='top' src={`https://otruyenapi.com/uploads/comics/${item.thumb_url}`} />
               <Card.Body>
                 <Card.Title>{item.name || "No Item"}</Card.Title>
-                <Card.Text>{item.UpdateAt || "No Item"}</Card.Text>
+                <Card.Text>{item.updatedAt ? new Date(item.updatedAt).toLocaleString() : "No Item"}</Card.Text>
                 <Card.Text>
-                  {items.Category && items.Category.length > 0 ? (items.Category.map((Category,index)=>(
+                  {item.category && item.category.length > 0 ? (item.category.map((Category,index)=>(
                     <Badge bg='info' key={index}>
                       {Category.name}
                     </Badge>

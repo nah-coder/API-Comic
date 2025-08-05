@@ -48,7 +48,7 @@ export const Trending = () => {
         </Row>
         <Row>
           {items && items.length > 0 ? (items.map((item,index)=>(
-            <Col>
+            <Col key={item.id || item.slug || index} xs={6} md={3} className="mb-4">
             <Card>
             <Card.Img variant='top' src={`https://otruyenapi.com/uploads/comics/${item.thumb_url}`} />
               <Card.Body>
