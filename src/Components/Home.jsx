@@ -18,6 +18,7 @@ export const Home = () => {
         const response = await axios.get(`https://otruyenapi.com/v1/api/danh-sach/truyen-moi?page=${currentPage}`);
         setData(response.data);
         setLoading(false);
+        console.log('Trang:', currentPage, response.data.data.items); // Thêm dòng này
         console.log(response);
       }catch(error){
         setError(error.message);
@@ -29,7 +30,7 @@ export const Home = () => {
   if(loading) return <p>Loading...</p>
   if(error) return <p>Error: {error}</p>
 
-  const totalItems = data?.data?.param?.pagination?.totalItems || 0;
+  const totalItems = data?.data?.params?.pagination?.totalItems || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const paginate=(pageNumber)=>{
@@ -71,14 +72,14 @@ export const Home = () => {
         </Row>
         <Row>
           {items && items.length > 0 ? (items.map((item,index)=>(
-            <Col>
+            <Col key={item.id || item.slug || index} xs={6} md={3} className="mb-4">
             <Card>
             <Card.Img variant='top' src={`https://otruyenapi.com/uploads/comics/${item.thumb_url}`} />
               <Card.Body>
                 <Card.Title>{item.name || "No Item"}</Card.Title>
-                <Card.Text>{item.UpdateAt || "No Item"}</Card.Text>
+                <Card.Text>{item.updatedAt ? new Date(item.updatedAt).toLocaleString() : "No Item"}</Card.Text>
                 <Card.Text>
-                  {items.Category && items.Category.length > 0 ? (items.Category.map((Category,index)=>(
+                  {item.category && item.category.length > 0 ? (item.category.map((Category,index)=>(
                     <Badge bg='info' key={index}>
                       {Category.name}
                     </Badge>
